@@ -1,1 +1,1 @@
-This repository contains the analysis scripts supporting the manuscript "Projected Altitudinal Shifts in Climatically Suitable Areas for Dengue Transmission Across SouthAmerica, Africa and Asia Under Warming Climate"
+This repository contains the analysis scripts supporting the manuscript "Projected Altitudinal Shifts in Climatically Suitable Areas for Dengue Transmission Across South America, Africa and Asia Under Warming Climate"
