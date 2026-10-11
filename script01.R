@@ -27,9 +27,9 @@ suppressPackageStartupMessages({
 #set paths and seed ----
 
 set.seed(24)
-p.results <- "H:/Dengue_bioclimatic/results"
+p.results <- "H:/Dengue_manuscript_2026/results"
 #dir.create(p.results, showWarnings = TRUE, recursive = FALSE)
-p.dbio <- "H:/Dengue_bioclimatic/data"
+p.dbio <- "H:/Dengue_manuscript_2026/data"
 
 # LOAD AND CLEAN DENGUE OCCURRENCE DATA
 # Load datasets
@@ -132,8 +132,6 @@ dengv_fl <- dengv_iso3[!flags$.summary,]
 dim(dengv_fl) #868 174
 
 summary(dengv_cl$year)
-#Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#1990    2001    2007    2007    2012    2024  
 
 # Output cleaned data
 dengue_cleaned_path <- file.path(p.results, "Dengue_cleaned_1990_2024_clean2025.csv")
@@ -233,8 +231,7 @@ bio_buff <- terra::crop(bio_curr, buffer_union, mask = TRUE)
 bio_buff_pth <- file.path(p.results, "dengv_bio_buffer_2025.tif")
 writeRaster(bio_buff, bio_buff_pth, overwrite=TRUE)
 
-# CREATE BACKGROUND MASK (EXCLUDE PRESENCE CELLS)
-
+# Create background mask (Exclude presence cells)
 grayscale <- bio_curr[[1]]
 values(grayscale)[!is.na(values(grayscale))] <- 1
 bio_mask <- terra::mask(grayscale, buffer_union)
@@ -247,8 +244,7 @@ pres_cells <- terra::extract(bio_mask, pres_points, cells = TRUE)$cell
 values(bio_mask)[pres_cells] <- NA
 plot(bio_mask)
 
-# SAMPLE BACKGROUND POINTS
-
+# sample background points
 set.seed(24)
 bg_points <- terra::spatSample(bio_mask, size = 10000, method = "random", na.rm = TRUE,
                                as.points = TRUE, exhaustive = TRUE)
@@ -264,8 +260,7 @@ terra::writeRaster(bio_mask, filename = mask_path, overwrite = TRUE)
 write.csv(bg_points_df, file = bg_points_df_csv, row.names = FALSE)
 
 
-# CHECK FOR MULTICOLLINEARITY (AFTER EXPERT FILTERING)
-
+# check for multicolinearity 
 # Extract bioclimatic values for occurrence points
 dengv_coords <- data.frame(dengv_thinned[, c("longitude", "latitude")])
 occs.bio <- terra::extract(bio_curr, dengv_coords, ID = FALSE)
@@ -275,6 +270,3 @@ dim(occs.bio)
 
 dengv_coords_complete <- file.path(p.results, "dengv_coords_complete_2025.csv")
 write.csv(dengv_coords, file = dengv_coords_complete, row.names = FALSE)
-
-
-
