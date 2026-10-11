@@ -404,15 +404,13 @@ for (yr in years) {
 }
 
 
-message("Future projections completed (raw, ensemble outputs saved)")
-
 #create binary files
 binary_dir <- file.path(p.results, "binary_maps")
 change_dir <- file.path(p.results, "change_maps")
 dir.create(binary_dir, showWarnings = FALSE, recursive = TRUE)
 dir.create(change_dir, showWarnings = FALSE, recursive = TRUE)
 
-# Occurrence data (used all occurrence records to compute thresholds)
+# Occurrence data (all occurrence records to compute thresholds)
 dengv_coords_complete <- file.path(p.results, "dengv_coords_complete_2025.csv")
 p_coords <- read.csv(dengv_coords_complete)
 any(is.na(p_coords))
@@ -420,7 +418,6 @@ any(is.na(p_coords))
 occ <- p_coords
 
 #Threshold function (MTP, 5%, 10%) ----
-# This function is safe, reproducible, and SDM-standard.
 sdm_threshold <- function(suit_raster, occ_xy, type = "mtp") {
   
   occ_vals <- terra::extract(suit_raster, occ_xy)[,2]
@@ -444,8 +441,8 @@ sdm_threshold <- function(suit_raster, occ_xy, type = "mtp") {
   stop("Unknown threshold type")
 }
 
-# Compute thresholds from current ensemble ----
-#Use current ensemble mean (recommended best practice).
+# Compute thresholds  ----
+#Use current ensemble mean.
 # Load current ensemble
 ens_glo_bio <- rast(file.path(out_glo, "prediction_global_baseline.tif"))
 
